@@ -6,5 +6,3 @@ where category like '경제'
 order by PUBLISHED_DATE
 
 
-
-# DATE_FORMAT(PUBLISHED_DATE,'%Y-%m-%d')
