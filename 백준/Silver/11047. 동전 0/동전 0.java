@@ -1,21 +1,24 @@
 import java.util.*;
 
-public class Main {
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        int n = sc.nextInt();   // 동전의 종류
-        int k = sc.nextInt();   // 만들어야하는 최종 합
-        int result = 0;
-        int[] coin = new int[n];
-        for (int i = 0; i < n; i++) {
-            coin[i] = sc.nextInt();
-        }
-        for (int i = n-1; i >= 0; i--) {
-            if (coin[i] <= k) {
-                result += (k / coin[i]);
-                k = k % coin[i];
+    public class Main {
+        public static void main(String[] args) throws Exception {
+            Scanner sc = new Scanner(System.in);
+            
+            int n = sc.nextInt();
+            int k = sc.nextInt();
+            int[] arr = new int[n];
+            int count = 0;
+            
+            for (int i = 0; i < n; i++) {
+                arr[i] = sc.nextInt();
             }
+            
+            for (int i = n -1; i >= 0; i--) {
+                if (k >= arr[i]) {
+                    count += k / arr[i];
+                    k = k % arr[i];
+                }
+            }
+            System.out.println(count);
         }
-        System.out.println(result);
     }
-}
