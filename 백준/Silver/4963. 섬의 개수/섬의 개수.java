@@ -5,11 +5,11 @@ import java.util.*;
 public class Main {
     static int[][] arr;    // 지도 저장 배열
     static boolean[][] visited;       // 방문 여부
-    static int w;
-    static int h;
-    static int count;        // 부모 저장 배열
-    static int[] dx = {1, -1, -1, 1};
-    static int[] dy = {-1, 1, -1, 1};
+    static int w;   // 지도의 넓이
+    static int h;   // 지도의 높이
+    static int count;        // 섬의 개수
+    static int[] dx = {1, -1, -1, 1, 0, 1, 0, -1};
+    static int[] dy = {-1, 1, -1, 1, -1, 0, 1, 0};
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         while (true) {
@@ -39,16 +39,11 @@ public class Main {
     }
     static void DFS(int y, int x, int[][] arr) {
         visited[y][x] = true;
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 8; i++) {
             int nx = dx[i] + x;
             int ny = dy[i] + y;
             if (ny <= h && nx <= w && ny >= 0 && nx >= 0 && arr[ny][nx] == 1 && !visited[ny][nx]) {
                 DFS(ny, nx, arr);
-            }
-            else if (ny <= h && nx <= w && ny >= 0 && nx >= 0 && arr[y][nx] == 1 && !visited[y][nx]) {
-                DFS(y, nx, arr);
-            } else if (ny <= h && nx <= w && ny >= 0 && nx >= 0 && arr[ny][x] == 1 && !visited[ny][x]) {
-                DFS(ny, x, arr);
             }
         }
     }
