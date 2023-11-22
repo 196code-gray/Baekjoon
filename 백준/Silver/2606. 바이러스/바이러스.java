@@ -1,38 +1,42 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.*;
 
 public class Main {
-    // 경로 저장할 2차원 배열
-    static int[][] map;
-    // 탐색 여부를 체크한다.
-    static boolean[] check;
-    static int n, m, v; // 정점, 간선, 시작
-    static int count; // 바이러스 수
-
-    public static int dfs (int i) {
-        check[i] = true; // 방문을 했으니 true로 변경.
-
-        for(int j =1; j <= n; j++) {
-            if(map[i][j] == 1 && check[j] == false) {
-                count++;
-                dfs(j);
+    static int count;   // 개수 저장
+    static List<Integer> [] arr;    // 그래프 저장
+    static boolean[] visited;   // 방문 여부
+    public static void main(String[] args) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int n = Integer.parseInt(br.readLine());    
+        int m = Integer.parseInt(br.readLine());
+        arr = new List[n + 1];  // 1부터 시작하기 때문에 n + 1
+        for (int i = 1; i <= n; i++) {
+            arr[i] = new ArrayList<>();
+        }
+        count = 0;
+        visited = new boolean[n + 1];
+        for (int i = 1; i <= m; i++) {
+            String[] s = br.readLine().split(" ");  // 띄어쓰기 기준으로 문자열 받기
+            arr[Integer.parseInt(s[0])].add(Integer.parseInt(s[1]));    // 양방향이므로 서로 저장
+            arr[Integer.parseInt(s[1])].add(Integer.parseInt(s[0]));
+        }
+        BFS(1);     // 1부터 시작
+        System.out.println(count);
+    }
+    static void BFS(int num) {
+        Queue<Integer> q = new LinkedList<>();
+        visited[num] = true;
+        q.add(num);
+        while (!q.isEmpty()) {      // 큐에 값이 없을때 까지
+            int now = q.remove();
+            for (int i : arr[now]) {
+                if (!visited[i]) {
+                    q.add(i);
+                    visited[i] = true;
+                    count++;
+                }
             }
         }
-        return count;
     }
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        n = scanner.nextInt();
-        m = scanner.nextInt();
-        v = 1; // 시작 번호
-        map = new int[n+1][n+1];
-        check = new boolean[n+1];
-
-        for(int i = 0; i < m; i++) {
-            int first = scanner.nextInt();
-            int second = scanner.nextInt();
-            map[first][second] = map[second][first] = 1;
-        }
-        System.out.println(dfs(1));
-        scanner.close();
-        }
 }
