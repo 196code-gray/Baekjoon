@@ -10,7 +10,7 @@ public class Main {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = null;
         Set<Integer> trainSet = new HashSet<>();
-        st = new StringTokenizer(br.readLine(), " ");
+        st = new StringTokenizer(br.readLine(), " ");    // 띄어쓰기 기준으로 나눠줌
         int N = Integer.parseInt(st.nextToken());
         int M = Integer.parseInt(st.nextToken());
         int[] train = new int[N + 1];
@@ -24,7 +24,7 @@ public class Main {
             switch (order) {
                 case 1: {
                     seat = Integer.parseInt(st.nextToken());
-                    train[trainIdx] |= 1 << seat;
+                    train[trainIdx] |= 1 << seat;    // OR연산 후 1칸 자리만큼 왼쪽으로
                     break;
                 }
                 case 2: {
