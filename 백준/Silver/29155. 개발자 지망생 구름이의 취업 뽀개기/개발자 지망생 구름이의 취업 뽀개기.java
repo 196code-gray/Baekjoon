@@ -7,13 +7,13 @@ public class Main {
         int n = Integer.parseInt(br.readLine());
         int[] arr = new int[6];
         List<Integer>[] list = new List[6];
-        StringTokenizer st = new StringTokenizer(br.readLine());
+        StringTokenizer st = new StringTokenizer(br.readLine(), " ");
         for (int i = 1; i <= 5; i++) {
             arr[i] = Integer.parseInt(st.nextToken());
             list[i] = new LinkedList<>();
         }
         for (int i = 0; i < n; i++)  {
-            st = new StringTokenizer(br.readLine());
+            st = new StringTokenizer(br.readLine(), " ");
             list[Integer.parseInt(st.nextToken())].add(Integer.parseInt(st.nextToken()));
         }
         int time = 0;
