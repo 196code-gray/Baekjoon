@@ -5,7 +5,6 @@ public class Main {
     static int n, sx, sy, ex, ey;   // 편의점, 시작x, 시작y, 끝x, 끝y
     public static void main(String[] args) throws IOException{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
         int t = Integer.parseInt(br.readLine());
         for(int i = 0; i < t; i++) {
