@@ -1,6 +1,5 @@
-import java.util.*;
 class Solution {
-   public long solution(int[] weights) {
+    public long solution(int[] weights) {
         long answer = 0;
         long[] arr = new long[1001];
 
