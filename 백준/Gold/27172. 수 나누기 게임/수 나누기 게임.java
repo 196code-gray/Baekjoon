@@ -29,9 +29,7 @@ public class Main {
             }
         }
         StringBuilder sb = new StringBuilder();
-        for (int i = 1; i < score.length; i++) {
-            sb.append(score[i]).append(" ");
-        }
+        for (int i = 1; i < score.length; i++) sb.append(score[i]).append(" ");
         System.out.println(sb);
     }
 }
