@@ -1,40 +1,43 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.*;
 
 public class Main {
-    static List<Integer>[] list;    // 그래프 저장 배열 리스트
-    static boolean[] visited;       // 방문 여부
-    static int n;       // 노드 개수
-    static int[] parent;        // 부모 저장 배열
-    public static void main(String[] args) throws Exception {
+    static List<Integer>[] list;
+    static int[] node;
+    static boolean[] visited;
+    public static void main(String args[]) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        n = Integer.parseInt(br.readLine());
+        int n= Integer.parseInt(br.readLine());
+        node = new int[n + 1];
         list = new List[n + 1];
-        visited = new boolean[n + 1];
-        parent = new int[n + 1];
-        for (int i = 0; i <= n; i++) {
+        for (int i = 1; i <= n; i++){
             list[i] = new ArrayList<>();
         }
-        for (int i = 0; i < n - 1; i++) { 
-            StringTokenizer st = new StringTokenizer(br.readLine(), " ");
-            int a = Integer.parseInt(st.nextToken());
-            int b = Integer.parseInt(st.nextToken());
-            list[a].add(b);
-            list[b].add(a);
+        for (int i = 1; i < n; i++){
+            StringTokenizer st = new StringTokenizer(br.readLine());
+            int s = Integer.parseInt(st.nextToken());
+            int e= Integer.parseInt(st.nextToken());
+            list[s].add(e);
+            list[e].add(s);
         }
-        DFS(1);
-        for (int i = 2; i < parent.length; i++) {
-            System.out.println(parent[i]);
+        visited = new boolean[n + 1];
+        bfs(1);
+
+        for (int i = 2; i < node.length; i++) {
+            System.out.println(node[i]);
         }
     }
-
-    static void DFS(int index) {
-        visited[index] = true;      // 현재 노드 방문 체크
-        for (int i : list[index]) {
-            if (!visited[i]) {      // 한번도 들리지 않은 노드라면
-                parent[i] = index;  // 자식 노드 배열에 현재 노드(부모) 저장
-                DFS(i);
+    static void bfs(int num){
+        Queue<Integer> q = new LinkedList<>();
+        q.add(num);
+        while (!q.isEmpty()){
+            int now = q.poll();
+            visited[now] = true;
+            List<Integer> now2 = list[now];
+            for (Integer i : now2) {
+                if (visited[i]) continue;
+                q.add(i);
+                node[i] = now;
             }
         }
     }
