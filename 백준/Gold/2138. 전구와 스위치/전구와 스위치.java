@@ -1,49 +1,43 @@
+import java.io.*;
 import java.util.*;
+
 public class Main {
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        int n = sc.nextInt();
-        int ans1 = 1, ans2 = 0, INF = 987654321;
-        String now = sc.next();
-        String expect = sc.next();
+    static int[] arr1, arr2, result;
+    public static void main(String args[]) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int n = Integer.parseInt(br.readLine());
+        String s = br.readLine();
+        String e = br.readLine();
+        int a1 = 1, a2 = 0, ans = 0;
 
-        int[] now_arr_1 = new int[n];
-        int[] now_arr_2 = new int[n];
-        int[] expect_arr = new int[n];
-
-        for(int i = 0; i < n; i++) {
-            now_arr_1[i] = now.charAt(i)-'0';
-            now_arr_2[i] = now.charAt(i)-'0';
-            expect_arr[i] = expect.charAt(i)-'0';
+        arr1 = new int[n];
+        arr2  = new int[n];
+        result = new int[n];
+        for (int i = 0; i < n; i++){
+            arr1[i] = s.charAt(i) - '0';
+            arr2[i] = s.charAt(i) - '0';
+            result[i] = e.charAt(i) - '0';
         }
-        now_arr_1[0] = 1-now_arr_1[0];
-        now_arr_1[1] = 1-now_arr_1[1];
+        arr1[0] = (arr1[0] == 1) ? 0 : 1;
+        arr1[1] = (arr1[1] == 1) ? 0 : 1;
 
-        for(int i = 1; i < n; i++) {
-            if(now_arr_1[i-1] != expect_arr[i-1]) {
-                now_arr_1[i-1] = 1 - now_arr_1[i-1];
-                now_arr_1[i] = 1 - now_arr_1[i];
-                ans1++;
-                if(i != n-1)
-                    now_arr_1[i+1] = 1 - now_arr_1[i+1];
-
+        for (int i = 1; i < n; i++){
+            if (result[i -1] != arr1[i -1]) {
+                arr1[i] = (arr1[i] == 1) ? 0 : 1;
+                arr1[i -1] = (arr1[i -1] == 1) ? 0 : 1;
+                a1++;
+                if (i != n -1) arr1[i + 1] = (arr1[i + 1] == 1) ? 0 : 1;
             }
-            if(now_arr_2[i-1] != expect_arr[i-1]) {
-                now_arr_2[i-1] = 1 - now_arr_2[i-1];
-                now_arr_2[i] = 1 - now_arr_2[i];
-                ans2++;
-                if(i != n-1)
-                    now_arr_2[i+1] = 1 - now_arr_2[i+1];
+            if (result[i -1] != arr2[i -1]){
+                arr2[i] = (arr2[i] == 1) ? 0 : 1;
+                arr2[i -1] = (arr2[i -1] == 1) ? 0 : 1;
+                a2++;
+                if (i != n -1) arr2[i + 1] = (arr2[i + 1] == 1) ? 0 : 1;
             }
         }
+        if (arr1[n -1] != result[n -1]) a1 = Integer.MAX_VALUE;
+        if (arr2[n -1] != result[n -1]) a2 = Integer.MAX_VALUE;
 
-        if(now_arr_1[n-1] != expect_arr[n-1]) ans1 = INF;
-        if(now_arr_2[n-1] != expect_arr[n-1]) ans2 = INF;
-
-
-        if(ans1 == INF && ans2 == INF)
-            System.out.println(-1);
-        else
-            System.out.println(Math.min(ans1, ans2));
+        System.out.println((a1 == Integer.MAX_VALUE && a2 == Integer.MAX_VALUE) ? -1 : Math.min(a1, a2));
     }
 }
