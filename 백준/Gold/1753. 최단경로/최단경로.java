@@ -5,21 +5,22 @@ public class Main {
     static int v, e, k;
     static List<Edge>[] arr;
     static long[] distance;
-//    static boolean[] visited = new boolean[100_000_001];
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = new StringTokenizer(br.readLine());
-        v= Integer.parseInt(st.nextToken()); e = Integer.parseInt(st.nextToken());
-        k = Integer.parseInt(br.readLine());
+    static int read() throws Exception {
+        int c, n = System.in.read() & 15;
+        while ((c = System.in.read()) > 32) n = (n << 3) + (n << 1) + (c & 15);
+        if (c == 13) System.in.read();
+        return n;
+    }
+    public static void main(String[] args) throws Exception {
+        v = read(); e = read(); k = read() -1;
         arr = new List[20001];
-        for (int i = 1; i <= v; i++){
+        for (int i = 0; i < v; i++){
             arr[i] = new ArrayList<>();
         }
-        for (int i = 1; i <= e; i++){
-            st = new StringTokenizer(br.readLine());
-            int s = Integer.parseInt(st.nextToken());
-            int e = Integer.parseInt(st.nextToken());
-            int p = Integer.parseInt(st.nextToken());
+        for (int i = 0; i < e; i++){
+            int s = read() -1;
+            int e = read() -1;
+            int p = read();
             arr[s].add(new Edge(e, p));
         }
         distance = new long[20001];
@@ -27,7 +28,7 @@ public class Main {
         distance[k] = 0;
         dijkstr(k);
 
-        for (int i = 1; i <= v; i++) {
+        for (int i = 0; i < v; i++) {
             if (distance[i] == Long.MAX_VALUE) System.out.println("INF");
             else System.out.println(distance[i]);
         }
