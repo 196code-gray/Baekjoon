@@ -1,31 +1,33 @@
-import java.util.*;
+    import java.io.*;
+    import java.util.*;
 
     public class Main {
-        public static void main(String[] args) throws Exception {
-            Scanner sc = new Scanner(System.in);
-
-            int n = sc.nextInt();
-            int[][] arr = new int[n][2];
-            for (int i = 0; i < n; i++) {
-                arr[i][0] = sc.nextInt();
-                arr[i][1] = sc.nextInt();
+        public static void main(String args[]) throws IOException {
+            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+            int n = Integer.parseInt(br.readLine());
+            int[][] time = new int[n][2];
+            for (int i = 0; i < n; i++){
+                StringTokenizer st= new StringTokenizer(br.readLine());
+                int s = Integer.parseInt(st.nextToken());
+                int e = Integer.parseInt(st.nextToken());
+                time[i][0] = s;
+                time[i][1] = e;
             }
-            Arrays.sort(arr, new Comparator<int[]>() {
+            Arrays.sort(time, new Comparator<int[]>() {
                 @Override
-                public int compare(int[] s, int[] e) {
-                    if (s[1] == e[1]) {
-                        return s[0] - e[0];
-                    } else return s[1] - e[1];
+                public int compare(int[] o1, int[] o2) {
+                    if (o1[1] == o2[1]) return o1[0] - o2[0];
+                    return o1[1] - o2[1];
                 }
             });
-            int count = 0;
-            int end = -1;
-            for (int i = 0; i < n; i++) {
-                if (arr[i][0] >= end) {
-                    end = arr[i][1];
-                    count++;
+
+            int ans = 0; int now = 0;
+            for (int i = 0; i < n; i++){
+                if (time[i][0] >= now) {
+                    ans++;
+                    now = time[i][1];
                 }
             }
-            System.out.println(count);
+            System.out.println(ans);
         }
     }
