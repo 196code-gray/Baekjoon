@@ -19,7 +19,31 @@ class Main{
             for (int j = 0; j < m; j++) map[i][j] = Integer.parseInt(st.nextToken());
         }
         ans = 0;
-        dfs(0);
+//        dfs(0);
+        int mul = n * m;
+        for (int w1 = 0; w1 < mul - 2; w1++) {
+            if (map[w1 / m][w1 % m] != 0)
+                continue;
+            map[w1 / m][w1 % m] = 1;
+            for (int w2 = w1 + 1; w2 < mul - 1; w2++) {
+                if (map[w2 / m][w2 % m] != 0)
+                    continue;
+                map[w2 / m][w2 % m] = 1;
+                for (int w3 = w2 + 1; w3 < mul; w3++) {
+                    if (map[w3 / m][w3 % m] != 0)
+                        continue;
+                    map[w3 / m][w3 % m] = 1;
+
+                    ///////
+                    bfs();
+                    ///////
+
+                    map[w3 / m][w3 % m] = 0;
+                }
+                map[w2 / m][w2 % m] = 0;
+            }
+            map[w1 / m][w1 % m] = 0;
+        }
         System.out.println(ans);
     }
 
