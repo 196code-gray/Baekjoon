@@ -12,16 +12,15 @@ class Main{
         }
         Arrays.sort(a, Collections.reverseOrder());
         int m = Integer.parseInt(br.readLine());
-        Integer[] box = new Integer[m];
+        List<Integer> box = new ArrayList<>();
         st = new StringTokenizer(br.readLine());
         int max = 0;
         for (int i = 0; i< m; i++){
-            box[i] = Integer.parseInt(st.nextToken());
-            if (max < box[i]) max = box[i];
+            box.add(Integer.parseInt(st.nextToken()));
+            if (max < box.get(i)) max = box.get(i);
         }
-        Arrays.sort(box, Collections.reverseOrder());
+        box.sort(Collections.reverseOrder());
         int e = 0;
-        boolean[] boxv = new boolean[m];
         while (true){
             if (a[0] < max) {
                 System.out.println(-1);
@@ -30,9 +29,9 @@ class Main{
             int boxidx = 0; int aidx = 0;
 
             while (aidx < a.length){
-                if (boxidx == box.length) break;
-                if (a[aidx] >= box[boxidx] && !boxv[boxidx]) {
-                    boxv[boxidx] = true;
+                if (boxidx == box.size()) break;
+                if (a[aidx] >= box.get(boxidx)) {
+                    box.remove(boxidx);
                     e++;
                     aidx++;
                 }
