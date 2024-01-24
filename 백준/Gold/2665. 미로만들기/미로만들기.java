@@ -24,7 +24,7 @@ public class Main {
     }
 
     private static void bfs() {
-        PriorityQueue<int[]> q = new PriorityQueue<>(Comparator.comparingInt(o -> o[2]));
+        Queue<int[]> q = new LinkedList<>();
         q.offer(new int[]{0, 0, 0});
         while (!q.isEmpty()){
             int[] now = q.poll();
