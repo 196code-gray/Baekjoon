@@ -1,49 +1,55 @@
-import java.util.*;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.ArrayDeque;
 
 public class Main {
-    static int[] dx = {0, -1, 0, 1};
-    static int[] dy = {-1, 0, 1, 0};
-    static int[][] map, total;
-    static int n, ans;
-    public static void main(String[] args) throws IOException {
+    static int N;
+    static char[][] map;
+    static boolean[][] isVisited;
+
+    static int[] dy = { -1, 1, 0, 0 };
+    static int[] dx = { 0, 0, -1, 1 };
+    public static void main(String[] args) throws Exception{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        n = Integer.parseInt(br.readLine());
-        map = new int[n][n];
-        total = new int[n][n];
-        for (int i = 0; i < n; i++){
-            String[] s = br.readLine().split("");
-            for (int j = 0; j < n; j++){
-                map[i][j] = Integer.parseInt(s[j]);
-                total[i][j] = Integer.MAX_VALUE;
-            }
+        N = Integer.parseInt(br.readLine());
+        map = new char[N][];
+        isVisited = new boolean[N][N];
+        for (int i = 0; i < N; i++) {
+            map[i] = br.readLine().toCharArray();
         }
-        total[0][0] = 0;
-        bfs();
-        System.out.println(total[n-1][n-1]);
+
+
+        bfs01();
     }
+    static void bfs01() {
 
-    private static void bfs() {
-        Queue<int[]> q = new LinkedList<>();
-        q.offer(new int[]{0, 0, 0});
-        while (!q.isEmpty()){
-            int[] now = q.poll();
-            for (int i = 0; i < 4; i++){
-                int nx = dx[i] + now[0];
-                int ny = dy[i] + now[1];
+        ArrayDeque<int[]> q = new ArrayDeque<int[]>();
+        q.add(new int[] { 0, 0, 0 });
+        while (!q.isEmpty()) {
 
+            int[] temp = q.poll();
+            int y = temp[0];
+            int x = temp[1];
+            int w = temp[2];
+            if (y == N-1 && x == N-1) {
+                System.out.println(w);
+                return;
+            }
 
-                if (isaBoolean(nx, ny) && total[nx][ny] > total[now[0]][now[1]]){
-                    if (map[nx][ny] == 1) total[nx][ny] = total[now[0]][now[1]];
-                    else total[nx][ny] = total[now[0]][now[1]] + 1;
-                    q.offer(new int[]{nx, ny, total[nx][ny]});
+            for (int i = 0; i < 4; i++) {
+                int ny = y + dy[i];
+                int nx = x + dx[i];
+                if (ny < 0 || nx < 0 || ny > N-1 || nx > N-1)
+                    continue;
+                if (isVisited[ny][nx])
+                    continue;
+                isVisited[ny][nx] = true;
+                if (map[ny][nx] == '0') {
+                    q.add(new int[] { ny, nx, w + 1 });
+                } else {
+                    q.push(new int[] { ny, nx, w });
                 }
-
             }
         }
-    }
-
-    private static boolean isaBoolean(int nx, int ny) {
-        return nx >= 0 && nx < n && ny >= 0 && ny < n;
     }
 }
