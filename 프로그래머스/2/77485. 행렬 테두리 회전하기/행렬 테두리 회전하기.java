@@ -6,8 +6,7 @@ class Solution {
         num = new int[rows + 1][columns + 1];
         for (int i = 0; i < rows; i++){
             for (int j = 0; j < columns; j++){
-                num[i][j] = min++;
-                // System.out.print(num[i][j]);
+                num[i][j] = ((i) * columns + j+1);
             }
         }
         int[] ans = new int[queries.length];
