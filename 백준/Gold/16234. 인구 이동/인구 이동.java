@@ -19,7 +19,6 @@ public class Main {
         int group = 0; int ans = 0;
         while (true){
             group = 0;
-//            Queue<int[]> q = new LinkedList<>();
             boolean[][] visited = new boolean[n][n];
             for (int i = 0; i < n; i++){
                 for (int j = 0; j < n; j++){
