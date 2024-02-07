@@ -1,26 +1,28 @@
-import java.util.*;
 import java.io.*;
+import java.util.*;
 
-class Main{
-    public static void main(String[] args) throws IOException{
+public class Main {
+    static int n;
+
+    public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int n = Integer.parseInt(br.readLine());
-        int count = 1;  // 대각선
-        int sum = 0;    // 합
-        while (true){
-            if (n <= count + sum){
-                if (count % 2 == 0){
-                    System.out.println((n - sum) + "/" + (count - (n - sum -1)));
-                    break;
-                } else {
-                    System.out.println((count - (n - sum - 1)) + "/" + (n - sum));
-                    break;
-                }
-            }
-            else {
-                sum += count;
-                count++;
-            }
+        n = Integer.parseInt(br.readLine());
+        int s, e; s = e = 0;
+        while (n > e){
+            s++;
+             e+= s;
+        }
+        int d = e - n;
+        if (s % 2 == 0){
+            int a = s-d;
+            int b = d+1;
+            System.out.println(a+"/"+b);
+            return;
+        }
+        else {
+            int a = d+1;
+            int b = s-d;
+            System.out.println(a+"/"+b);
         }
     }
 }
