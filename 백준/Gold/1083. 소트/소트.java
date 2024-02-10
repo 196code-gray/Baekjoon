@@ -1,48 +1,53 @@
-import java.util.*;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
-class Main{
-    public static void main(String[] args) throws IOException{
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int n = Integer.parseInt(br.readLine());
-        int[] a = new int[n];
+public class Main {
 
-        StringTokenizer st =new StringTokenizer(br.readLine());
-        for (int i = 0; i < n; i++) a[i] = Integer.parseInt(st.nextToken());
+    public static void main(String[] args) throws IOException {
+        //input
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+        int n = Integer.parseInt(bufferedReader.readLine());
 
-        int s = Integer.parseInt(br.readLine());
-        StringBuilder sb = new StringBuilder();
-
-//        if (s > (n*(1+n)/2)) {
-//            Arrays.sort(a);
-//            for (int i = n -1; i > 0; i--){
-//                sb.append(a[i]).append(" ");
-//            }
-//            System.out.println(sb);
-//            return;
-//        }
-        for (int i = 0; i < n && s > 0; i++){
-                int max = a[i];
-                int index = -1;
-
-                for (int j = i + 1; j < n && j <= i+s; j++){
-                    if (a[j] > max) {
-                        max = a[j];
-                        index = j;
-                    }
-                }
-                if (index == -1) continue;
-                s -= index - i;
-
-                for (int j = index; j >= i + 1; j--){
-                    int num = a[j];
-                    a[j] = a[j -1];
-                    a[j -1] = num;
-                }
-            }
-        for (int i = 0; i < n; i++) {
-            sb.append(a[i]).append(" ");
+        String[] numLine = bufferedReader.readLine().split(" ");
+        int[] nums = new int[n];
+        for (int i = n-1; i >= 0; i--){
+            nums[i] = Integer.parseInt(numLine[i]);
         }
-        System.out.println(sb);
+
+        int s = Integer.parseInt(bufferedReader.readLine());
+
+        //sort
+        int maxIndex, temp, count;
+
+        for (int i = 0; i < n; i++) {
+            maxIndex = i;
+            count = 0;
+            for (int j = i; j < n; j++) {
+                if (count > s) {
+                    break;
+                }
+                if (nums[maxIndex] < nums[j]) {
+                    maxIndex = j;
+                }
+                count++;
+            }
+            for (int j = maxIndex; j > i; j--) {
+                if (s == 0) {
+                    break;
+                }
+                temp = nums[j];
+                nums[j] = nums[j - 1];
+                nums[j - 1] = temp;
+                s--;
+            }
+        }
+
+        //print
+        StringBuffer stringBuffer = new StringBuffer();
+        for (int i = 0; i < n; i++) {
+            stringBuffer.append(nums[i]).append(" ");
+        }
+        System.out.print(stringBuffer.toString());
     }
 }
