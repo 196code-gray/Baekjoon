@@ -1,22 +1,17 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.text.MessageFormat;
-import java.util.PriorityQueue;
-import java.util.Queue;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 
 public class Main {
     static int N;
     static int[][] CAVE;
     static int[] X = new int[] {1, -1, 0, 0};
     static int[] Y = new int[] {0, 0, 1, -1};
-
-    static String ANSWER = "Problem {0}: {1}";
+    static StringBuilder sb = new StringBuilder();
+    static int count;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int count = 1;
+        count = 1;
         while (true) {
             N = Integer.parseInt(br.readLine());
             if (N == 0) {
@@ -30,23 +25,23 @@ public class Main {
                     CAVE[i][j] = Integer.parseInt(st.nextToken());
                 }
             }
-
-            System.out.println(MessageFormat.format(ANSWER, count++, bfs()));
+            bfs();
         }
+        System.out.println(sb);
     }
 
-    private static int bfs() {
+    private static void bfs() {
         boolean[][] visit = new boolean[N][N];
         int[][] costs = new int[N][N];
 
-        Queue<Node> queue = new PriorityQueue<>();
+        PriorityQueue<Node> queue = new PriorityQueue<>();
         queue.add(new Node(0, 0, CAVE[0][0]));
         costs[0][0] = CAVE[0][0];
         visit[0][0] = true;
 
         while (!queue.isEmpty()) {
             Node now = queue.poll();
-
+            if (now.cost > costs[now.start][now.end]) continue;
             int start = now.start;
             int end = now.end;
             int cost = now.cost;
@@ -66,7 +61,7 @@ public class Main {
                 }
             }
         }
-        return costs[N - 1][N - 1];
+        sb.append("Problem " + count++ + ": " + costs[N - 1][N - 1]).append("\n");
     }
 }
 
