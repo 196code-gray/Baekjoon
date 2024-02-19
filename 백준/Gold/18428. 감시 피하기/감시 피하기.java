@@ -19,35 +19,6 @@ public class Main {
                 }
             }
         }
-        for (int[] i : teacher) {
-            int x = i[0];
-            int y = i[1];
-            if (x + 1 < n && y < n && x + 1 >= 0 && y >= 0) {
-                if (map[x + 1][y].equals("S")) {
-                    System.out.println("NO");
-                    System.exit(0);
-                }
-            }
-            if (x - 1 < n && y < n && x - 1 >= 0 && y >= 0) {
-                if (map[x - 1][y].equals("S")) {
-                    System.out.println("NO");
-                    System.exit(0);
-                }
-            }
-            if (x< n && y-1 < n && x >= 0 && y-1 >= 0) {
-                if (map[x][y-1].equals("S")) {
-                    System.out.println("NO");
-                    System.exit(0);
-                }
-            }
-            if (x< n && y+1 < n && x >= 0 && y+1 >= 0) {
-                if (map[x][y+1].equals("S")) {
-                    System.out.println("NO");
-                    System.exit(0);
-                }
-            }
-        }
-
         dfs(0);
         System.out.println("NO");
     }
