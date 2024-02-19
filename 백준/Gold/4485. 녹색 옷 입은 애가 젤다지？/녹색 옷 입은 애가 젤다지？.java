@@ -6,7 +6,6 @@ public class Main {
     static int[][] CAVE;
     static int[] X = new int[] {1, -1, 0, 0};
     static int[] Y = new int[] {0, 0, 1, -1};
-    static StringBuilder sb = new StringBuilder();
     static int count;
 
     public static void main(String[] args) throws IOException {
@@ -25,12 +24,11 @@ public class Main {
                     CAVE[i][j] = Integer.parseInt(st.nextToken());
                 }
             }
-            bfs();
+            System.out.println("Problem " + count++ + ": " + bfs());
         }
-        System.out.println(sb);
     }
 
-    private static void bfs() {
+    private static int bfs() {
         boolean[][] visit = new boolean[N][N];
         int[][] costs = new int[N][N];
 
@@ -61,7 +59,7 @@ public class Main {
                 }
             }
         }
-        sb.append("Problem " + count++ + ": " + costs[N - 1][N - 1]).append("\n");
+        return costs[N - 1][N - 1];
     }
 }
 
