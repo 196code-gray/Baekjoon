@@ -1,46 +1,63 @@
-import java.lang.reflect.Array;
-import java.util.*;
 import java.io.*;
+import java.util.*;
 
-class Main{
-    public static void main(String[] args) throws IOException {
+public class Main {
+    public static void main(String[] args) throws NumberFormatException, IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int t = Integer.parseInt(br.readLine()); // 테스트 개수
         StringBuilder sb = new StringBuilder();
-        int t = Integer.parseInt(br.readLine());
 
-        while (t --> 0){
+        while (t-- > 0) {
             Deque<Integer> d = new ArrayDeque<>();
-            boolean up = true;
-            String ac = br.readLine();
-            int n = Integer.parseInt(br.readLine());
-            String s = br.readLine().replace("[", "").replace("]", "");
-            String[] ss = s.split(",");
-            boolean error = false;
-
-            for (int i = 0; i < n; i++){
-                d.offer(Integer.parseInt(ss[i]));
-            }
-            for (int i = 0; i < ac.length(); i++){
-                if (ac.charAt(i) == 'R') up = (up) ? false : true;
-                else {
-                    if (d.isEmpty()) {
+            String[] s = br.readLine().split(""); // 명령어 입력 받기
+            int n = Integer.parseInt(br.readLine()); // 숫자 개수
+            String[] num = br.readLine()
+                    .replace("[", "").replace("]", "").split(",");
+            boolean isTure = false;
+            if (n == 0) {
+                for (int i = 0; i < s.length; i++) {
+                    if (s[i].equals("D")) {
                         sb.append("error").append("\n");
-                        error = true;
+                        isTure = true;
                         break;
                     }
-                    if (up) d.pollFirst();
-                    else d.pollLast();
+                }
+                if (!isTure) sb.append("[]").append("\n");
+                isTure = true;
+            }
+            if (isTure) continue;
+            for (int i = 0; i < num.length; i++) {
+                d.offer(Integer.parseInt(num[i]));
+            }
+
+            boolean change = false; // 뒤집기 여부
+
+            for (int i = 0; i < s.length; i++) {
+                if (s[i].equals("R")) {
+                    change = (change) ? false : true;
+                } else {
+                    if (d.isEmpty()) {
+                        sb.append("error").append("\n");
+                        isTure = true;
+                        break;
+                    }
+                    if (change) d.pollLast();
+                    else d.pollFirst();
                 }
             }
+
             if (!d.isEmpty()) {
                 sb.append("[");
-                while (!d.isEmpty()){
-                    if (up) sb.append(d.pollFirst());
-                    else if (!up) sb.append(d.pollLast());
-                    if (d.size() != 0) sb.append(",");
+                while (!d.isEmpty()) {
+                    if (change) {
+                        sb.append(d.pollLast());
+                    } else sb.append(d.pollFirst());
+
+                    if (!d.isEmpty()) sb.append(",");
                 }
                 sb.append("]").append("\n");
-            } else if (d.isEmpty() && !error) sb.append("[").append("]").append("\n");
+            }
+            else if (!isTure && d.isEmpty()) sb.append("[]").append("\n");
         }
         System.out.println(sb);
     }
