@@ -42,7 +42,7 @@ public class Main {
             for(int i = 1; i <= n; i++) {
                 int v = coins[i].value;
                 int q = coins[i].quantity;
-
+                      
                 for(int j = total/2; j >= v; j--) {
                     if(dp[j - v]) {  // dp[j-v]가 가능해야 됨
 
@@ -51,8 +51,10 @@ public class Main {
                             if(j - v + v * k > total/2) break;  // dp[total/2] 이상으로는 어차피 채울 필요 없음
                             dp[j - v + v * k] = true;
                         }
-                    }// 리얼 어렵다
+                    }
+                    if (dp[total /2]) break;
                 }
+                if (dp[total /2]) break;
             }
             System.out.println(dp[total / 2] ? 1 : 0);
         }
