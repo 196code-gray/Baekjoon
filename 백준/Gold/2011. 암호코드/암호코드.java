@@ -20,9 +20,6 @@ class Main{
             if ((Integer.parseInt(c)) > 9 && Integer.parseInt(c) < 27){
                 dp[i] += (dp[i -2]) % 1000000;
             }
-//            else if (dp[i] == 0){
-//                dp[i] = dp[i -1];
-//            }
         }
         System.out.println(dp[s.length() -1] % 1000000);
     }
