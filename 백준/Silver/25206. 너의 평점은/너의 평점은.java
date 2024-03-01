@@ -1,59 +1,59 @@
 import java.io.*;
 import java.util.*;
 
-class Main{
+public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        double grades = 0;  // 학점 총합
-        double majors = 0;  // 전공과목 합
-        int n = 20;
-        while (n --> 0) {
+        int subject = 20;
+        double sum, ans; sum = ans = 0;
+        while (subject --> 0){
             StringTokenizer st = new StringTokenizer(br.readLine());
-            String s = st.nextToken();
-            double score = Double.parseDouble(st.nextToken());
-            String rating = st.nextToken();
-
-            switch (rating){
+            st.nextToken();
+            double score = Double.parseDouble(st.nextToken()); // 학점
+            String rank = st.nextToken(); // 가목평점
+            sum += score;
+            double n = 0;
+            switch (rank){
                 case "A+" :
-                    majors += (4.5 * score);
-                    grades += score;
+                    n = score * 4.5;
+                    ans += n;
                     break;
                 case "A0":
-                    majors += (4.0 * score);
-                    grades += score;
+                    n = score * 4.0;
+                    ans += n;
                     break;
                 case "B+":
-                    majors += (3.5 * score);
-                    grades += score;
+                    n = score * 3.5;
+                    ans += n;
                     break;
                 case "B0":
-                    majors += (3.0 * score);
-                    grades += score;
+                    n = score * 3.0;
+                    ans += n;
                     break;
                 case "C+":
-                    majors += (2.5 * score);
-                    grades += score;
+                    n = score * 2.5;
+                    ans += n;
                     break;
                 case "C0":
-                    majors += (2.0 * score);
-                    grades += score;
+                    n = score * 2.0;
+                    ans += n;
                     break;
                 case "D+":
-                    majors += (1.5 * score);
-                    grades += score;
+                    n = score * 1.5;
+                    ans += n;
                     break;
                 case "D0":
-                    majors += (1.0 * score);
-                    grades += score;
+                    n = score * 1.0;
+                    ans += n;
                     break;
                 case "F":
-                    majors += (0.0 * score);
-                    grades += score;
-//                    grades -= score;
+                    n = score * 0.0;
+                    ans += n;
                     break;
+                case "P":
+                    sum -= score;
             }
         }
-//        if (Double.isNaN(majors/grades)) System.out.println("0.000000");
-        System.out.printf("%.6f", (majors / grades));
+        System.out.println(ans / sum);
     }
 }
