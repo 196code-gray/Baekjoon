@@ -1,47 +1,37 @@
-import java.lang.reflect.Array;
 import java.util.*;
 import java.io.*;
 
-class Main{
-    static int l, c;
-    static String result;
-    static String[] code;
-    static boolean[] visited;
-    static StringBuilder sb;
-    static Set<Character> vowel = new HashSet<>();
-    public static void main(String[] args) throws IOException {
+public class Main {
+    static int L,C;
+    static StringBuilder sb = new StringBuilder();
+    static String[] str, abc = {"a", "e", "i", "o", "u"};
+    public static void main(String[] args) throws Exception{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = new StringTokenizer(br.readLine());
-        l = Integer.parseInt(st.nextToken()); c = Integer.parseInt(st.nextToken());
-        code = new String[c]; visited = new boolean[c];
-        vowel.add('a'); vowel.add('e'); vowel.add('i'); vowel.add('o'); vowel.add('u');
-        result = "";
+        StringTokenizer st =new StringTokenizer(br.readLine());
+        L = Integer.parseInt(st.nextToken()); C = Integer.parseInt(st.nextToken()); // 길이, 주어진 문자
+
+        str = new String[C];
         st = new StringTokenizer(br.readLine());
-        for (int i = 0; i < c; i++) code[i] = st.nextToken();
-        Arrays.sort(code);
-        sb = new StringBuilder();
-        dfs(0, 0, 0);
+        for (int i = 0; i< C; i++){
+            str[i] = st.nextToken();
+        }
+        Arrays.sort(str);
+        dfs(0, "", 0);
         System.out.println(sb);
     }
-
-    private static void dfs(int depth, int s, int e) {
-        if (depth == l){
-            int count = 0;
-            for (int i = 0; i < result.length(); i++){
-                if (vowel.contains(result.charAt(i))) count++;
+    static void dfs(int depth, String pw, int idx){
+        if (depth == L){
+            String s = pw;
+            for (int i = 0; i < 5; i++){
+                s = s.replace(abc[i], "");
             }
-            if (l - count >= 2 && count >= 1) sb.append(result).append("\n");
+            if (s.length() >= 2 && pw.length() != s.length()){
+                sb.append(pw).append("\n");
+            }
             return;
         }
-
-        for (int i = e; i < c; i++){
-            if (!visited[i]){
-                result += code[i];
-                visited[i] = true;
-                dfs(depth + 1, s + 1, i + 1);
-                visited[i] = false;
-                result = result.substring(0, s);
-            }
+        for (int i = idx; i < C; i++){
+            dfs(depth + 1, pw + str[i], i+1);
         }
     }
 }
