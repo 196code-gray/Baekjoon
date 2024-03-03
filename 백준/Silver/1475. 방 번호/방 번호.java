@@ -1,20 +1,22 @@
-import java.lang.reflect.Array;
 import java.util.*;
 import java.io.*;
 
-class Main{
-    public static void main(String[] args) throws IOException {
+public class Main {
+    public static void main(String[] args) throws Exception{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        String n = br.readLine();
-        int[] num = new int[10];
-        for (int i= 0; i < n.length(); i++){
-            int now = Character.getNumericValue(n.charAt(i));
-            if (now == 6) num[9]++;
-            else num[now]++;
+        String[] s = br.readLine().split("");
+        int[] set = new int[10]; // 0부터 9까지
+        for (int i = 0; i < s.length; i++){
+            int now = s[i].charAt(0)-'0';
+            if (now == 6) now = 9;
+            set[now]++;
         }
         int ans = 0;
-        for (int i = 0; i < 9; i++) ans = Math.max(ans, num[i]);
-        int card = (num[9] % 2 == 0) ? num[9]/2 : (num[9] /2) + 1;
-        System.out.println(Math.max(ans, card));
+        if (set[9] % 2 == 0) set[9] /= 2;
+        else set[9] = set[9] / 2 + 1;
+        for (int i =0; i < 10; i++){
+            ans = Math.max(ans, set[i]);
+        }
+        System.out.println(ans);
     }
 }
