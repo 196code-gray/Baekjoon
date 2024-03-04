@@ -65,12 +65,12 @@ class Solution {
         }
 
         int[] answer2 = new int[n / 2];
-        if (n == 2) {
-            return new int[]{answer[0] + 1};
-        } else {
+        // if (n == 2) {
+        //     return new int[]{answer[0] + 1};
+        // } else {
             for (int i = 0; i < answer.length; i++) {
                 answer2[i] = answer[i] + 1;
-            }
+            // }
         }
         return answer2;
     }
