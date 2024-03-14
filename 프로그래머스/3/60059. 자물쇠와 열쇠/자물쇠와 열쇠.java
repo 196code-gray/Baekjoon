@@ -10,12 +10,13 @@ class Solution {
         keyTurn[3] = Turn(keyTurn[2]);  // 세번 회전(280)
         int empty = 0; // 좌물쇠의 빈 홈 개수
 
+         // 빈 홈의 개수
         for (int idx = 0; idx < lock.length; idx++) {
             for (int inner = 0; inner < lock.length; inner++) {
                 if (lock[idx][inner] == 0) empty++;
             }
         }
-        if (empty == 0) return true;
+        if (empty == 0) return true; // 빈 홈이 없는 경우 무조건 열림
         for (int right = 1 - key.length; right < lock.length; right++) {
             for (int down = 1 - key.length; down < lock.length; down++) {
                 for (int turnCount = 0; turnCount < 4; turnCount++) {
@@ -25,7 +26,7 @@ class Solution {
         }
         return false;
     }
-
+    // 열쇠 회전 메서드
     static int[][] Turn(int[][] arr) {
         int[][] tarr = new int[arr.length][arr.length];
         for (int i = 0; i < arr.length; i++) {
@@ -38,7 +39,7 @@ class Solution {
         }
         return tarr;
     }
-
+    // 열쇠와 좌물쇠를 확인하며 열 수 있는지 확인
     static boolean open(int[][] key, int[][] lock, int right, int down, int empty) {
         for (int idx = 0; idx < key.length; idx++) {
             if (idx + down >= lock.length || idx + down < 0) continue;
