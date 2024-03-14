@@ -7,27 +7,25 @@ public class Main {
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         N = Integer.parseInt(br.readLine());
-        dfs(1, "2");
-        dfs(1, "3");
-        dfs(1, "5");
-        dfs(1, "7");
+        dfs(0, 0);
         System.out.println(sb);
     }
-    static void dfs(int depth, String ans){
+    static void dfs(int depth, int ans){
         if (depth == N){
             sb.append(ans).append("\n");
             return;
         }
         for (int i = 1; i <= 9; i++){
-            int now = Integer.parseInt(ans + i);
-            if (isPrime(now)) continue;
-            dfs(depth + 1, String.valueOf(now));
+            int now = ans * 10 + i;
+            if (!isPrime(now)) continue;
+            dfs(depth + 1, now);
         }
     }
     static private boolean isPrime(int num){
-        for (int i = 2; i <= num/2; i++){
-            if (num % i == 0) return true;
+        if (num == 1) return false;
+        for (int i = 2; i <= Math.sqrt(num); i++){
+            if (num % i == 0) return false;
         }
-        return false;
+        return true;
     }
 }
