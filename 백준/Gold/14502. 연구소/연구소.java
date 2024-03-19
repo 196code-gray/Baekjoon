@@ -1,111 +1,81 @@
-import java.io.*;
 import java.util.*;
+import java.io.*;
 
-class Main{
-    static int[][] map, virus;
-    static int[] dx = {0, 1, 0, -1};
-    static int[] dy = {1, 0, -1, 0};
-    static boolean[][] visited;
-    static int n, m, ans;
-
-    public static void main(String[] args) throws IOException {
+public class Main {
+    static int[][] map, copy;
+    static int n,m, ans;
+    static boolean[][] visit, vv;
+    static int[] dx = {0,-1,0,1};
+    static int[] dy = {-1,0,1,0};
+    public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
         n = Integer.parseInt(st.nextToken()); m = Integer.parseInt(st.nextToken());
-        visited = new boolean[n][m]; map = new int[n][m];
-
-        for (int i = 0; i< n; i++){
+        map = new int[n][m]; ans = 0; vv = new boolean[n][m];
+        for (int i = 0; i < n; i++){
             st = new StringTokenizer(br.readLine());
-            for (int j = 0; j < m; j++) map[i][j] = Integer.parseInt(st.nextToken());
-        }
-        ans = 0;
-//        dfs(0);
-        int mul = n * m;
-        for (int w1 = 0; w1 < mul - 2; w1++) {
-            if (map[w1 / m][w1 % m] != 0)
-                continue;
-            map[w1 / m][w1 % m] = 1;
-            for (int w2 = w1 + 1; w2 < mul - 1; w2++) {
-                if (map[w2 / m][w2 % m] != 0)
-                    continue;
-                map[w2 / m][w2 % m] = 1;
-                for (int w3 = w2 + 1; w3 < mul; w3++) {
-                    if (map[w3 / m][w3 % m] != 0)
-                        continue;
-                    map[w3 / m][w3 % m] = 1;
-
-                    ///////
-                    bfs();
-                    ///////
-
-                    map[w3 / m][w3 % m] = 0;
-                }
-                map[w2 / m][w2 % m] = 0;
+            for (int j= 0; j<m; j++){
+                map[i][j] = Integer.parseInt(st.nextToken()); // 입력받기
             }
-            map[w1 / m][w1 % m] = 0;
         }
+
+        dfs(0, 0,0); // 현재 깊이, 행, 열
         System.out.println(ans);
     }
-
-    private static void dfs(int depth) {
-        if (depth == 3) {
-            bfs();
+    static void dfs(int depth, int x, int y){
+        if (depth == 3){ // 벽을 만들면
+            virous();
             return;
         }
-
-        for (int i= 0; i < n; i ++){
+        for (int i = x; i < n; i++){
             for (int j = 0; j < m; j++){
-                if (map[i][j] == 0){
-                    map[i][j] = 1;
-                    dfs(depth + 1);
-                    map[i][j] = 0;
-                }
+                if (map[i][j] != 0 || vv[i][j]) continue;
+                map[i][j] = 1; // 벽으로 변경
+                vv[i][j] = true;
+                dfs(depth + 1, i, j);
+                vv[i][j] = false;
+                map[i][j] = 0;  // 다시 빈칸으로
             }
         }
     }
-
-    private static void bfs() {
+    static void virous(){
         Queue<int[]> q = new LinkedList<>();
-        visited = new boolean[n][m];
-        virus = new int[n][m];
-        // 바이러스를 저장할 새로운 배열 생성
+        visit = new boolean[n][m];
+        copy = new int[n][m];
+        // 배열 복사
         for (int i = 0; i < n; i++){
-            for (int j = 0; j < m; j++){
-                virus[i][j] = map[i][j];
-            }
+            for (int j = 0; j < m; j++) copy[i][j] = map[i][j];
         }
-        // 바이러스일 경우 큐에 넣어줌.
+
         for (int i = 0; i < n; i++){
             for (int j = 0; j < m; j++){
-                if (map[i][j] == 2) {
-                    q.offer(new int[]{i, j});
+                if (copy[i][j] != 2 || visit[i][j]) continue;
+                q.offer(new int[]{i, j});
+                visit[i][j] = true;
+
+                while (!q.isEmpty()){
+                    int[] now = q.poll();
+
+                    for (int k = 0; k < 4; k++){
+                        int nx = dx[k] + now[0];
+                        int ny = dy[k] + now[1];
+
+                        if (nx < 0 || nx >= n || ny < 0 || ny >= m) continue;
+                        if (visit[nx][ny] || copy[nx][ny] != 0) continue;
+                        q.offer(new int[]{nx, ny});
+                        visit[nx][ny] = true;
+                        copy[nx][ny] = 2; // 바이러스 퍼짐
+                    }
                 }
             }
         }
-
-        while (!q.isEmpty()){
-            int[] now = q.poll();
-            visited[now[0]][now[1]] = true;
-            for (int i = 0; i < 4; i++){
-                int nx = dx[i] + now[0];
-                int ny = dy[i] + now[1];
-
-                if (isBoundary(nx, ny) && !visited[nx][ny] && virus[nx][ny] == 0){
-                    q.offer(new int[]{nx, ny});
-                    visited[nx][ny] = true;
-                    virus[nx][ny] = 2;
-                }
-            }
-        }
-        int max = 0;
+        int count = 0;
         for (int i = 0; i < n; i++){
             for (int j = 0; j < m; j++){
-                if (virus[i][j] == 0) max++;
+                if (copy[i][j] != 0) continue;
+                count++;
             }
         }
-        ans = Math.max(max, ans);
-    }
-    private static boolean isBoundary(int i, int j) {
-        return i >= 0 && j >= 0 && i < n && j < m;
+        ans = Math.max(ans, count);
     }
 }
