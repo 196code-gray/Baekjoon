@@ -1,29 +1,35 @@
-import java.util.Scanner;
+import java.io.*;
+import java.util.*;
 
 public class Main {
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        int N = scanner.nextInt(); // 사용자로부터 N 입력 받기
-        int[] use = new int[4]; // 사용중인 기기
-        int[] plan = new int[100]; // 계획
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int N = Integer.parseInt(br.readLine());
+        int[] box = new int[4]; // 사용중인 박스
+        int[] card = new int[100];
 
+        if (N == 0) {
+            System.out.println(0);
+            return;
+        }
+        StringTokenizer st = new StringTokenizer(br.readLine());
         for (int i = 0; i < N; i++) {
-            plan[i] = scanner.nextInt() + 1; // 계획 입력 받고 1 증가
+            card[i] = Integer.parseInt(st.nextToken()) + 1; // 카드 받고 1 증가
         }
 
         int result = 0;
         for (int i = 0; i < N; i++) {
             boolean inUse = false;
             for (int j = 0; j < 4; j++) {
-                if (plan[i] == use[j]) {
+                if (card[i] == box[j]) {
                     inUse = true;
                     break;
                 }
             }
             if (inUse) continue;
             for (int j = 0; j < 4; j++) {
-                if (use[j] == 0) {
-                    use[j] = plan[i];
+                if (box[j] == 0) {
+                    box[j] = card[i];
                     inUse = true;
                     break;
                 }
@@ -36,15 +42,17 @@ public class Main {
             int swap = 0, val = -1;
             for (int j = 0; j < 4; j++) {
                 int term = 0;
-                for (int k = i + 1; k < N && use[j] != plan[k]; k++) term++;
+                for (int k = i + 1; k < N && box[j] != card[k]; k++) {
+                    term++;
+                }
                 if (term > val) {
                     swap = j;
                     val = term;
                 }
             }
             result++;
-            use[swap] = plan[i];
+            box[swap] = card[i];
         }
-        System.out.println(result); // 결과 출력
+        System.out.println(result);
     }
 }
