@@ -1,75 +1,59 @@
 import java.util.*;
 
 class Solution {
-    // 최소 대기 시간을 저장할 변수
-    int answer = Integer.MAX_VALUE;
-    // 상담사 수
-    int consultantCount;
-    // 요청 목록
-    int[][] requestList;
+     public int solution(int k, int n, int[][] reqs) {
+        int ans = 0;
+        int[][] time = new int[21][k + 1]; int[] mento = new int[k + 1]; // 맨토 수에 따른 시간 저장, 현재 유형에 맨토
+        int[] mm = new int[k + 1];
+        int nn = n;
+        n-=k; int count = 1;
+        Arrays.fill(mento, 1);
+        Arrays.fill(mm, 1);
 
-    // 주어진 요구 사항에 대해 최소 대기 시간을 구하는 메서드
-    public int solution(int k, int n, int[][] reqs) {
-        consultantCount = k; // 상담사 수 할당
-        requestList = reqs; // 요청 목록 할당
-        combination(0, n - 1, k - 1, new boolean[n - 1]); // 조합을 이용하여 상담사들에게 일을 배정
-        return answer; // 최소 대기 시간 반환
-    }
-
-    // 조합을 구하는 메서드
-    void combination(int start, int n, int r, boolean[] ary) {
-        if (r == 0) { // 기저 조건: r이 0이 되면 조합 완성
-            int[] consultantList = new int[consultantCount]; // 상담사 리스트 생성
-            Arrays.fill(consultantList, 1); // 각 상담사의 일한 횟수 초기화
-
-            int index = 0;
-            for (int i = 0; i < ary.length; i++) {
-                if (ary[i]) { // 해당 상담사가 일을 할 경우
-                    index++; // 다음 상담사로 이동
-                    continue;
+        while (n != -1) {
+            for (int i = 1; i <= k; i++) { // 현재 상담 유형
+                PriorityQueue<Integer> q = new PriorityQueue<>(); // 가장 짧은 상담 시간이 먼저 오도록
+                for (int j = 0; j < reqs.length; j++) {  // 각 유형에 맞는 상담 시간
+                    if (reqs[j][2] != i) continue; // 현재 상담 유형과 다르다면 continue
+                    if (mm[reqs[j][2]] > q.size()) {  // 상담 바로 가능한 멘토가 있을 경우
+                        q.offer(reqs[j][1] + reqs[j][0]);
+                    } else {
+                        if (reqs[j][0] >= q.peek()) {  // 앞에 끝난 사람과 시간이 맞을 경우
+                            q.poll();
+                            q.offer(reqs[j][0] + reqs[j][1]);
+                        } else {
+                            int end = q.poll();
+                            time[mm[reqs[j][2]]][reqs[j][2]] += end - reqs[j][0];
+                            q.offer(end + reqs[j][1]);
+                        }
+                    }
                 }
-
-                consultantList[index]++; // 해당 상담사의 일한 횟수 증가
             }
-
-            measureTime(consultantList); // 일한 시간을 측정하여 최소 대기 시간 갱신
-        }
-
-        for (int i = start; i < n; i++) {
-            ary[i] = true; // 현재 상담사가 일을 하도록 설정
-            combination(i + 1, n, r - 1, ary); // 재귀 호출로 다음 상담사의 일을 배정
-            ary[i] = false; // 현재 상담사가 일을 마치고 다음 상담사로 넘어감
-        }
-    }
-
-    // 일한 시간을 측정하여 최소 대기 시간을 갱신하는 메서드
-    void measureTime(int[] consultantList) {
-        int waitTime = 0; // 대기 시간 초기화
-        PriorityQueue<Integer>[] endQueueList = new PriorityQueue[consultantList.length]; // 각 상담사가 일을 마치는 시간을 저장하는 우선순위 큐 배열 생성
-        for (int i = 0; i < consultantList.length; i++) {
-            endQueueList[i] = new PriorityQueue<>(); // 각 상담사에 대한 우선순위 큐 초기화
-        }
-
-        for (int[] request: requestList) { // 각 요청에 대해 반복
-            int start = request[0]; // 요청 시작 시간
-            int end = request[1]; // 요청 종료 시간
-            int type = request[2] - 1; // 요청 타입
-
-            if (endQueueList[type].size() < consultantList[type]) { // 해당 타입의 상담사가 일을 처리할 수 있는 경우
-                endQueueList[type].offer(start + end); // 해당 상담사에게 일을 할당하고 종료 시간을 우선순위 큐에 추가
-                continue;
+            int idx = 0;
+            if (n != nn - k) {
+                int max = 0;
+                for (int i = 1; i <= k; i++) {
+                    if (max < Math.abs(time[mm[i] - 1][i] - time[mm[i]][i])) {
+                        max = Math.max(Math.abs(time[mm[i] - 1][i] - time[mm[i]][i]), max); // 현재 인덱스 시간보다 i 시간이 더 크다면 변경
+                        idx = i;
+                    }
+                }
+                if(idx == 0) break;
             }
+            for (int i = 1; i<= k; i++) mm[i]++;
+            if (n != nn - k) {
+                mento[idx]++; // n이 0이 아닐경우 해당 유형 멘토 증가
 
-            int next = endQueueList[type].poll(); // 가장 일찍 끝나는 상담의 종료 시간
-            if (next > start) { // 요청 시작 시간보다 먼저 끝난 경우
-                waitTime += next - start; // 대기 시간 추가
-                endQueueList[type].offer(next + end); // 해당 상담사에게 일을 할당하고 종료 시간을 우선순위 큐에 추가
+                for (int i = 1; i <= k; i++) {
+                    if (i == idx) continue;
+                    mm[i]--;
+                }
             }
-            else { // 요청 시작 시간에 일이 가능한 경우
-                endQueueList[type].offer(start + end); // 해당 상담사에게 일을 할당하고 종료 시간을 우선순위 큐에 추가
-            }
+            nn++;
+            if (n != nn - k) n--;
         }
-
-        answer = Math.min(answer, waitTime); // 최소 대기 시간 갱신
+        for (int i = 1; i <= k; i++) ans += time[mento[i]][i];
+//        System.out.println(ans);
+        return ans;
     }
 }
