@@ -15,12 +15,12 @@ public class Main {
             gas[i] = Integer.parseInt(st.nextToken());
         }
         long price = 0;
-        int now = gas[0]; int idx = 0;
+        long now = gas[0]; int idx = 0;
 
         for (int i = 1; i < n; i++){
             if (gas[i] >= now) continue;
 
-            int plus = 0;
+            long plus = 0;
             for (int j = idx; j < i; j++){
                 plus += load[j] * now;
             }
@@ -30,7 +30,7 @@ public class Main {
         }
 
         if (idx != n-1){
-            int pp = 0;
+            long pp = 0;
             for (int i = idx; i < n-1; i++){
                 pp += load[i] * now;
             }
