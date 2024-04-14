@@ -1,52 +1,43 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 
-public class Main {
+class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = null;
-        Set<Integer> trainSet = new HashSet<>();
-        st = new StringTokenizer(br.readLine(), " ");    // 띄어쓰기 기준으로 나눠줌
-        int N = Integer.parseInt(st.nextToken());
-        int M = Integer.parseInt(st.nextToken());
-        int[] train = new int[N + 1];
-        int seat;
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        int n = Integer.parseInt(st.nextToken());
+        int m = Integer.parseInt(st.nextToken());
+        int[] train = new int[n];  // 기차
 
-        for (int i = 0; i < M; i++) {
-            st = new StringTokenizer(br.readLine(), " ");
-            int order = Integer.parseInt(st.nextToken());
-            int trainIdx = Integer.parseInt(st.nextToken());
+        while (m-- > 0) {
+            st = new StringTokenizer(br.readLine());
+            int num = Integer.parseInt(st.nextToken());
 
-            switch (order) {
-                case 1: {
-                    seat = Integer.parseInt(st.nextToken());
-                    train[trainIdx] |= 1 << seat;    // OR연산 후 1칸 자리만큼 왼쪽으로
-                    break;
+            if (num == 1 || num == 2) {
+                int i = Integer.parseInt(st.nextToken());
+                int x = Integer.parseInt(st.nextToken());
+
+                if (num == 1) train[i -1] |= (1 << x);
+                else train[i -1] &= ~(1 << x);
+            }
+            else {
+                int i = Integer.parseInt(st.nextToken());
+
+                if (num == 3) {
+                    train[i -1] = (train[i -1] << 1); // 현재 train[i -1] 기차를 1 비트 뒤로
+                    train[i -1] &= ((1 << 21) -1); // 전체 1로 설정 후 AND 연산
                 }
-                case 2: {
-                    seat = Integer.parseInt(st.nextToken());
-                    train[trainIdx] &= ~(1 << seat);
-                    break;
-                }
-                case 3: {
-                    train[trainIdx] <<= 1;
-                    train[trainIdx] &= ((1 << 21) - 1);
-                    break;
-                }
-                case 4: {
-                    train[trainIdx] >>= 1;
-                    train[trainIdx] &= ~1;
-                    break;
+                else {
+                    train[i - 1] = (train[i - 1] >> 1); // 1 비트 앞으로
+                    train[i-1] &= ~1;
                 }
             }
+
         }
-        for (int i = 1; i <= N; i++) {
-            trainSet.add(train[i]);
+        Set<Integer> s = new HashSet<>();
+        for (int i : train) {
+            s.add(i);
         }
-        System.out.println(trainSet.size());
+        System.out.println(s.size());
     }
 }
