@@ -1,48 +1,62 @@
 import java.util.*;
 class Solution {
-    static String[] dd;
-    static boolean[] visited;
-    static int ans;
-    static String[] p = {"A", "C","F", "J", "M", "N", "R", "T"};
+    static char[] f = {'A', 'C', 'F', 'J', 'M', 'N', 'R', 'T'};
+    static Queue<String> q;
     public int solution(int n, String[] data) {
-        dd = data;
-        ans = 0;
-        visited = new boolean[8];
-        dfs(0, "");
+        q = new LinkedList<>();
+        
+        dfs(0);
+        int ans = 0;
+        while (!q.isEmpty()){
+            String s = q.poll();
+            int cnt = 0;
+            for (int i= 0; i < data.length; i++){
+            if (!possible(s, data[i])) break; // 현재 배치 불가
+                cnt++; 
+            }
+            if (cnt == data.length) ans++; // 가능한 경우의 수
+            
+        }
+        
         return ans;
     }
-    static void dfs(int depth, String s){
-        if (depth == 8){
-            if(check(s)){
-                ans++;
+    static void dfs(int idx){
+        if (idx == 8){
+            String s= "";
+            for (int i = 0;i < 8; i++){
+                s +=  f[i];
             }
+            q.offer(s);
             return;
         }
-        for (int i = 0; i < 8; i++){
-            if (!visited[i]){
-                visited[i] = true;
-                dfs(depth + 1, s + p[i]);
-                visited[i] = false;
-            }
+        for (int i = idx; i < 8; i++){
+            char now = f[i];
+            f[i] = f[idx];
+            f[idx] = now;
+            dfs(idx + 1);
+            f[idx]= f[i];
+            f[i] = now;
         }
     }
-
-    private static boolean check(String s) {
-        for (String data : dd) {
-            int idx = (Math.abs(s.indexOf(data.charAt(0)) - s.indexOf(data.charAt(2))) -1);
-            char b = data.charAt(3);
-            int dis = data.charAt(4)-'0';
-
-            if (b == '=') {
-                if (idx != dis) return false;
-            }
-            else if (b == '>') {
-                if (dis >= idx) return false;
-            }
-            else {
-                if (dis <= idx) return false;
-            }
+    static boolean possible(String s, String data){
+        String target1 = String.valueOf(data.charAt(0)); // 부탁한 사람
+        String target2 = String.valueOf(data.charAt(2)); // 상대
+        char op = data.charAt(3);  // 같음 || 초과 || 미만
+        int dist = Math.abs(s.indexOf(target1) - s.indexOf(target2)) -1;
+        int num = data.charAt(4) - '0';
+        
+        switch(op){
+            case '=':
+                if (dist == num)
+                    return true;
+                break;
+            case '<':
+                if (dist < num) return true;
+                break;
+            case '>':
+                if (dist > num) return true;
+                break;
         }
-        return true;
+        return false;
     }
 }
