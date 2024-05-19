@@ -17,11 +17,15 @@ public class Main {
     }
 
     static PriorityQueue<Jewelry> q;
+    static PriorityQueue<Integer> pq;
     static int n, k;
     static int[] bags;
+    static long ans;
+    static BufferedReader br;
+    static StringTokenizer st;
     public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = new StringTokenizer(br.readLine());
+         br = new BufferedReader(new InputStreamReader(System.in));
+         st = new StringTokenizer(br.readLine());
         n = Integer.parseInt(st.nextToken()); k = Integer.parseInt(st.nextToken());
 
         q = new PriorityQueue<>();
@@ -39,8 +43,8 @@ public class Main {
 
         Arrays.sort(bags); // 가방 무게도 오름차순(가벼운 가방부터)
 
-        long ans = 0; // n = 300,000 * v = 1,000,000 => int 범위 초과
-        PriorityQueue<Integer> pq = new PriorityQueue<>(Comparator.reverseOrder()); // 보석의 가치 내림차순(가방에 담을 수 있으면서 가장 가치가 높은 것)
+         ans = 0; // n = 300,000 * v = 1,000,000 => int 범위 초과
+        pq = new PriorityQueue<>(Comparator.reverseOrder()); // 보석의 가치 내림차순(가방에 담을 수 있으면서 가장 가치가 높은 것)
         // 가방에 담을 수 있는 보석 순회
         for (int i = 0; i < k; i++){
             while(!q.isEmpty() && q.peek().m <= bags[i]) {
