@@ -1,54 +1,59 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.util.ArrayDeque;
+import java.util.*;
+import java.io.*;
 
-public class Main {
-    static int N;
-    static char[][] map;
-    static boolean[][] isVisited;
+class Main {
+    static BufferedReader br;
+    static int n;
+    static PriorityQueue<int[]> q = new PriorityQueue<>(new Comparator<int[]>() {
+        @Override
+        public int compare(int[] o1, int[] o2) {
+            return o1[2] - o2[2]; // 변경 횟수 오름차순
+        }
+    });
+    static int[][] visit = new int[50][50], map = new int[50][50];
+    static int[] dx = {0, 1, 0, -1};
+    static int[] dy = {1, 0, -1, 0};
 
-    static int[] dy = { -1, 1, 0, 0 };
-    static int[] dx = { 0, 0, -1, 1 };
-    public static void main(String[] args) throws Exception{
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        N = Integer.parseInt(br.readLine());
-        map = new char[N][];
-        isVisited = new boolean[N][N];
-        for (int i = 0; i < N; i++) {
-            map[i] = br.readLine().toCharArray();
+    public static void main(String[] args) throws IOException {
+        br = new BufferedReader(new InputStreamReader(System.in));
+        n= Integer.parseInt(br.readLine());
+
+        for (int i = 0; i < n; i++){
+            String[] s = br.readLine().split("");
+            for (int j = 0; j < n; j++){
+                map[i][j] = s[j].charAt(0) - '0';
+            }
         }
 
+        for (int i = 0; i < n; i++) Arrays.fill(visit[i], 10000);
 
-        bfs01();
+        BFS();
     }
-    static void bfs01() {
+    static void BFS(){
+        q.offer(new int[]{0, 0, 0});
+        visit[0][0] = 0;
 
-        ArrayDeque<int[]> q = new ArrayDeque<int[]>();
-        q.add(new int[] { 0, 0, 0 });
-        while (!q.isEmpty()) {
+        while(!q.isEmpty()){
+            int[] now = q.poll();
+            int x= now[0];
+            int y =now[1];
+            int cnt =now[2];
 
-            int[] temp = q.poll();
-            int y = temp[0];
-            int x = temp[1];
-            int w = temp[2];
-            if (y == N-1 && x == N-1) {
-                System.out.println(w);
+            if (x == n -1 && y == n -1){
+                System.out.println(cnt);
                 return;
             }
 
-            for (int i = 0; i < 4; i++) {
-                int ny = y + dy[i];
-                int nx = x + dx[i];
-                if (ny < 0 || nx < 0 || ny > N-1 || nx > N-1)
-                    continue;
-                if (isVisited[ny][nx])
-                    continue;
-                isVisited[ny][nx] = true;
-                if (map[ny][nx] == '0') {
-                    q.add(new int[] { ny, nx, w + 1 });
-                } else {
-                    q.push(new int[] { ny, nx, w });
-                }
+            for (int i = 0;i < 4; i++){
+                int nx = dx[i] + x;
+                int ny = dy[i] + y;
+
+                if (nx < 0 || ny < 0 || nx >= n || ny >= n) continue;
+                int num = map[nx][ny] == 0 ? cnt + 1 : cnt;
+                if (visit[nx][ny] <= num) continue;
+
+                q.offer(new int[]{nx, ny, num});
+                visit[nx][ny] = num;
             }
         }
     }
