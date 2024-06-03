@@ -6,6 +6,7 @@ class Main {
     static StringTokenizer st;
     static int n, m;
     static int[] total = new int[100_001], people = new int[100_001];
+    static StringBuilder sb = new StringBuilder();
 
     public static void main(String[] args) throws Exception {
         br = new BufferedReader(new InputStreamReader(System.in));
@@ -30,6 +31,7 @@ class Main {
             total[i] += total[people[i]];
         }
 
-        for (int i = 1; i <= n; i++) System.out.print(total[i] + " ");
+        for (int i = 1; i <= n; i++) sb.append(total[i] + " ");
+        System.out.println(sb);
     }
 }
