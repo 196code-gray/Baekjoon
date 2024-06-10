@@ -5,11 +5,13 @@ public class Main {
     static BufferedReader br;
     static StringTokenizer st;
     static int[] parent, num;
+    static StringBuilder sb;
     static Map<String, Integer> map;
     static int n, t;
     public static void main(String[] args) throws Exception{
          br = new BufferedReader(new InputStreamReader(System.in));
          t = Integer.parseInt(br.readLine());
+         sb = new StringBuilder();
 
          while (t --> 0){
              n = Integer.parseInt(br.readLine());
@@ -36,9 +38,11 @@ public class Main {
                  }
 
                  int num = union(map.get(f1), map.get(f2));
-                 System.out.println(num);
+                 sb.append(num).append("\n");
+                
              }
          }
+        System.out.println(sb);
     }
     static int union(int f1, int f2){
          f1 = find(f1);
