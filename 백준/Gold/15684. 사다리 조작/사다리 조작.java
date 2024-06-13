@@ -45,7 +45,6 @@ public class Main {
 		
 		for (int i = x; i < H; i++) {
 			for (int j = y; j < N - 1; j++) {
-//				if (map[i][j] != 1 || map[i][j] != -1) continue;	이건 안됨!
 				if (map[i][j] != 0 || map[i][j + 1] != 0) continue;
 				
 				map[i][j] = 1;
