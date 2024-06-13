@@ -4,7 +4,7 @@ import java.util.StringTokenizer;
 
 public class Main {
 	
-	private static int N, M, H, map[][];
+    static int N, M, H, map[][];
 	
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -28,7 +28,7 @@ public class Main {
 			return;
 		} else {
 			for (int i = 0; i <= 3; i++)
-				if (dfs(0, 0, 0, i))
+				if (dfs(0, 0, 0, i)) // 0번째 가로줄, 0번째 세로줄, 사다리 추가 개수, 최대 사다리 추가
 					return;
 		}
 		System.out.println("-1");
@@ -45,7 +45,7 @@ public class Main {
 		
 		for (int i = x; i < H; i++) {
 			for (int j = y; j < N - 1; j++) {
-				if (map[i][j] != 0 || map[i][j + 1] != 0) continue;
+				if (map[i][j] != 0 || map[i][j + 1] != 0) continue; // 이미 사다리 존재
 				
 				map[i][j] = 1;
 				map[i][j + 1] = -1;
@@ -58,6 +58,7 @@ public class Main {
 		return false;
 	}
 
+    // 현재 사다리로 i에서 i 결과 나오는지 확인
 	private static boolean ladderCheck() {
 		for (int j = 0; j < N; j++) {
 			int nx = 0, ny = j;
@@ -71,7 +72,7 @@ public class Main {
 		}
 		return true;
 	}
-
+    // 각 세로줄에 홀수개 사다리 개수 
 	private static int searchOddNum() {
 		int oddNum = 0;
 		for (int j = 0; j < N - 1; j++) {
