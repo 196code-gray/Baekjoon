@@ -1,87 +1,95 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.*;
 
+import static java.lang.Integer.*;
+
 public class Main {
-    static class Node implements Comparable<Node> {
-        int maxCost, totalCost, vertex;
-        
-        Node(int maxCost, int totalCost, int vertex) {
-            this.maxCost = maxCost;
-            this.totalCost = totalCost;
-            this.vertex = vertex;
+    static int N, C;
+    static long[] dist;
+    static List<List<Node>> graph = new ArrayList<>();
+    static long answer = -1;
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        N = parseInt(st.nextToken());
+        int M = parseInt(st.nextToken());
+        int A = parseInt(st.nextToken());
+        int B = parseInt(st.nextToken());
+        C = parseInt(st.nextToken());
+
+        dist = new long[N + 1];
+        graph.add(null);
+        for (int i = 0; i < N; i++)
+            graph.add(new ArrayList<>());
+
+        int u, v;
+        long w;
+        while (M-- > 0) {
+            st = new StringTokenizer(br.readLine());
+            u = parseInt(st.nextToken());
+            v = parseInt(st.nextToken());
+            w = Long.parseLong(st.nextToken());
+
+            graph.get(u).add(new Node(v, w));
+            graph.get(v).add(new Node(u, w));
         }
-        
-        @Override
-        public int compareTo(Node o) {
-            return Integer.compare(this.totalCost, o.totalCost);
+
+        binSearch(A, B);
+        System.out.println(answer);
+        br.close();
+    }
+
+    static void binSearch(int start, int end) {
+        long low = 1;
+        long high = 1001;
+        long mid;
+
+        while (low <= high) {
+            mid = (low + high) / 2;
+
+            if (dijkstra(start, end, mid)) {
+                answer = mid;
+                high = mid - 1;
+            } else {
+                low = mid + 1;
+            }
         }
     }
 
-    static int n, m, start, end, c;
-    static List<int[]>[] graph;
-    static boolean[][] visited;
-    static final int INF = (int) 1e9;
-    static int result = INF;
-    
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        
-        n = sc.nextInt();
-        m = sc.nextInt();
-        start = sc.nextInt();
-        end = sc.nextInt();
-        c = sc.nextInt();
-        
-        graph = new ArrayList[n + 1];
-        for (int i = 0; i < graph.length; i++) {
-            graph[i] = new ArrayList<>();
-        }
-        
-        visited = new boolean[n + 1][n + 1];
-        
-        for (int i = 0; i < m; i++) {
-            int a = sc.nextInt();
-            int b = sc.nextInt();
-            int cost = sc.nextInt();
-            graph[a].add(new int[]{b, cost});
-            graph[b].add(new int[]{a, cost});
-        }
-        
-        dijkstra(start);
-        
-        if (result != INF) {
-            System.out.println(result);
-        } else {
-            System.out.println(-1);
-        }
-    }
-    
-    static void dijkstra(int start) {
-        PriorityQueue<Node> pq = new PriorityQueue<>();
-        pq.add(new Node(0, 0, start));
-        
+    static boolean dijkstra(int start, int end, long x) {
+        PriorityQueue<Node> pq = new PriorityQueue<>(Comparator.comparingLong(n -> n.w));
+        Arrays.fill(dist, MAX_VALUE);
+        dist[start] = 0;
+        pq.offer(new Node(start, dist[start]));
+
         while (!pq.isEmpty()) {
-            Node current = pq.poll();
-            int maxCost = current.maxCost;
-            int totalCost = current.totalCost;
-            int now = current.vertex;
-            
-            if (totalCost > c) {
-                continue;
-            }
-            
-            for (int[] next : graph[now]) {
-                int nextVertex = next[0];
-                int cost = totalCost + next[1];
-                
-                if (cost > c || visited[now][nextVertex]) {
-                    continue;
-                } else if (nextVertex == end) {
-                    result = Math.min(result, Math.max(maxCost, next[1]));
+            Node cur = pq.poll();
+
+            if (dist[cur.v] < cur.w) continue;
+
+            for (Node next : graph.get(cur.v)) {
+                if (next.w > x) continue;
+
+                if (dist[next.v] > dist[cur.v] + next.w) {
+                    dist[next.v] = dist[cur.v] + next.w;
+                    pq.offer(new Node(next.v, dist[next.v]));
                 }
-                
-                visited[now][nextVertex] = true;
-                pq.add(new Node(Math.max(maxCost, next[1]), cost, nextVertex));
             }
+        }
+
+        return dist[end] <= C;
+    }
+
+    static class Node {
+        int v;
+        long w;
+
+        public Node(int v, long w) {
+            this.v = v;
+            this.w = w;
         }
     }
 }
