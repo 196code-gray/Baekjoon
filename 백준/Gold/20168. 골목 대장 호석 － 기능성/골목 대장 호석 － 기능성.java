@@ -1,73 +1,87 @@
-import java.io.*;
 import java.util.*;
 
 public class Main {
-    static final int INF = 999_999_999;
-    static int N, M, A, B, C, max, dist[];
-    static BufferedReader br;
-    static StringTokenizer st;
-    static List<Node>[] list;
-    static PriorityQueue<int[]> q;
-
-    static class Node {
-        int e, c;
-
-        public Node(int e, int c) {
-            this.e = e;
-            this.c = c;
+    static class Node implements Comparable<Node> {
+        int maxCost, totalCost, vertex;
+        
+        Node(int maxCost, int totalCost, int vertex) {
+            this.maxCost = maxCost;
+            this.totalCost = totalCost;
+            this.vertex = vertex;
+        }
+        
+        @Override
+        public int compareTo(Node o) {
+            return Integer.compare(this.totalCost, o.totalCost);
         }
     }
 
-    public static void main(String[] args) throws Exception {
-        br = new BufferedReader(new InputStreamReader(System.in));
-        st = new StringTokenizer(br.readLine());
-        N = Integer.parseInt(st.nextToken()); M = Integer.parseInt(st.nextToken());
-        A = Integer.parseInt(st.nextToken()); B = Integer.parseInt(st.nextToken());
-        C = Integer.parseInt(st.nextToken());
-        max = -1;
-        dist = new int[11];
-
-        list = new List[11];
-        for (int i = 1; i <= 10; i++)
-            list[i] = new ArrayList<>();
-
-        q = new PriorityQueue<>(new Comparator<int[]>() {
-            @Override
-            public int compare(int[] o1, int[] o2) {
-                return o1[1] - o2[1];
-            }
-        });
-
-        for (int i = 0; i < M; i++){
-            st = new StringTokenizer(br.readLine());
-            int s = Integer.parseInt(st.nextToken());
-            int e = Integer.parseInt(st.nextToken());
-            int c = Integer.parseInt(st.nextToken());
-            list[s].add(new Node(e, c));
+    static int n, m, start, end, c;
+    static List<int[]>[] graph;
+    static boolean[][] visited;
+    static final int INF = (int) 1e9;
+    static int result = INF;
+    
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        
+        n = sc.nextInt();
+        m = sc.nextInt();
+        start = sc.nextInt();
+        end = sc.nextInt();
+        c = sc.nextInt();
+        
+        graph = new ArrayList[n + 1];
+        for (int i = 0; i < graph.length; i++) {
+            graph[i] = new ArrayList<>();
         }
-
-        Arrays.fill(dist, INF);
-
-        q.offer(new int[]{A, 0, 0}); // 출발 노드, 총 금액, 골목 최고 금액
-        while(!q.isEmpty()){
-            int[] now = q.poll();
-            int ns = now[0];
-            int nm = now[1];
-
-            for (Node i : list[ns]){
-                int next = i.e;
-                int money = i.c + nm;
-                int min = i.c < now[2] ? now[2] : i.c;
-                if (dist[next] > min && C >= money){
-                    dist[next] = min;
-                    q.offer(new int[]{next, money, min});
+        
+        visited = new boolean[n + 1][n + 1];
+        
+        for (int i = 0; i < m; i++) {
+            int a = sc.nextInt();
+            int b = sc.nextInt();
+            int cost = sc.nextInt();
+            graph[a].add(new int[]{b, cost});
+            graph[b].add(new int[]{a, cost});
+        }
+        
+        dijkstra(start);
+        
+        if (result != INF) {
+            System.out.println(result);
+        } else {
+            System.out.println(-1);
+        }
+    }
+    
+    static void dijkstra(int start) {
+        PriorityQueue<Node> pq = new PriorityQueue<>();
+        pq.add(new Node(0, 0, start));
+        
+        while (!pq.isEmpty()) {
+            Node current = pq.poll();
+            int maxCost = current.maxCost;
+            int totalCost = current.totalCost;
+            int now = current.vertex;
+            
+            if (totalCost > c) {
+                continue;
+            }
+            
+            for (int[] next : graph[now]) {
+                int nextVertex = next[0];
+                int cost = totalCost + next[1];
+                
+                if (cost > c || visited[now][nextVertex]) {
+                    continue;
+                } else if (nextVertex == end) {
+                    result = Math.min(result, Math.max(maxCost, next[1]));
                 }
+                
+                visited[now][nextVertex] = true;
+                pq.add(new Node(Math.max(maxCost, next[1]), cost, nextVertex));
             }
         }
-
-        if (dist[B] != INF)
-            max = dist[B];
-        System.out.println(max);
-
     }
 }
