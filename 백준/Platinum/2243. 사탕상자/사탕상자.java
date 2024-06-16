@@ -15,7 +15,7 @@ public class Main {
         n = Integer.parseInt(br.readLine());
         int treeHeight = (int) Math.ceil(Math.log(Max) / Math.log(2)); // 세그먼트 트리 높이
         int treeSize = 1 << (treeHeight + 1); // 트리 사이즈(최대 노드)
-        tree = new long[treeSize];
+        tree = new long[treeSize + 5];
         sb = new StringBuilder();
 
         for (int i = 0; i < n; i++) {
