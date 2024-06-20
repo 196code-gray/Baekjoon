@@ -1,69 +1,37 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.Arrays;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 
 public class Main {
-	public static void main(String[] args) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in)); 
-		StringTokenizer st = new StringTokenizer(br.readLine(), " "); 
+    static BufferedReader br;
+    static StringTokenizer st;
+    static StringBuilder sb;
+    public static void main(String[] s) throws Exception {
+        br = new BufferedReader(new InputStreamReader(System.in));
+        sb = new StringBuilder();
+        st = new StringTokenizer(br.readLine());
+        int m = Integer.parseInt(st.nextToken());
+        int n = Integer.parseInt(st.nextToken());
 
-		int M = Integer.parseInt(st.nextToken()); 
-		int N = Integer.parseInt(st.nextToken()); 
-
-		int[][] size = new int[M][M];
-
-		for(int i = 0; i < M; i++) 
-			Arrays.fill(size[i], 1);
-
-		for(int n = 0; n < N; n++) {
-			st = new StringTokenizer(br.readLine(), " "); 
-			int zero = Integer.parseInt(st.nextToken()); 
-			int one = Integer.parseInt(st.nextToken()); 
-			int two = Integer.parseInt(st.nextToken()); 
-
-			// 제일 왼쪽 열 애벌레 키우기 
-			for(int i = M-1; i > 0; i--) { 
-				if(zero != 0) {
-					zero--;
-				} else if(one != 0) {
-					one--;
-					size[i][0] += 1;
-				} else if(two != 0) {
-					two--;
-					size[i][0] += 2;
-				}
-			}
-
-			// 제일 위쪽 행 애벌레 키우기 
-			for(int i = 0; i < M; i++) {
-				if(zero != 0) {
-					zero--;
-				} else if(one != 0) {
-					one--;
-					size[0][i] += 1;
-				} else if(two != 0) {
-					two--;
-					size[0][i] += 2;
-				}
-			}
-		}
-
-		// 나머지 애벌레 키우기 
-		for(int i = 1; i < M; i++) {
-			for(int j = 1; j < M; j++)
-				size[i][j] = Math.max(size[i-1][j], Math.max(size[i-1][j-1], size[i][j-1]));
-		}
-		
-		// 출력
-		StringBuilder sb = new StringBuilder();
-		for (int i = 0; i < M; i++) { 
-			for (int j = 0; j < M; j++) 
-				sb.append(size[i][j] + " "); 
-			sb.append("\n"); 
-		}
-
-		System.out.println(sb.toString());
-	}
+        int[] arr = new int[m * 2 - 1];
+        while (n-- > 0) {
+            st = new StringTokenizer(br.readLine());
+           
+            int i = Integer.parseInt(st.nextToken());
+            
+            //1과2가 증가 되는 부분을 입력받은 카운트만큼 각각 증가
+            for (int j = 1; j <= 2; j++) {
+                int num = Integer.parseInt(st.nextToken());
+                while (num-- > 0) arr[i++] += j;
+            }
+        }
+        for (int i = m - 1; i >= 0; i--) {
+            sb.append(arr[i] + 1).append(" ");
+            //0번째를 제외한 첫번째 행을 출력
+            for (int j = m; j < 2 * m - 1; j++) {
+                sb.append(arr[j] + 1).append(" ");
+            }
+            sb.append("\n");
+        }
+        System.out.print(sb);
+    }
 }
