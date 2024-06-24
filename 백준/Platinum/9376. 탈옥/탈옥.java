@@ -36,8 +36,8 @@ public class Main {
             }
 
             List<int[]> list = new ArrayList<>();
-            for (int i = 0; i < h+2; i++){
-                for (int j = 0; j < w+2; j++){
+            for (int i = 1; i <= h; i++){
+                for (int j = 1; j <= w; j++){
                     if (map[i][j] == '$')
                         list.add(new int[]{i, j});
                 }
@@ -45,7 +45,7 @@ public class Main {
 
             int[][] first = BFS(list.get(0)[0], list.get(0)[1]); // 첫번째 죄수
             int[][] two = BFS(list.get(1)[0], list.get(1)[1]);  // 두번째 죄수
-            int[][] other = BFS(0, 0);  // 외부인
+            int[][] other = BFS(0, 0);  // 상근이(제 3자)
 
             int ans = Integer.MAX_VALUE;
             for (int i = 0; i < h+2; i++){
