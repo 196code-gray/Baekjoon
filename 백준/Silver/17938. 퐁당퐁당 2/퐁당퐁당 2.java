@@ -1,7 +1,8 @@
-import java.util.Scanner;
+import java.util.*;
+import java.io.*;
 
 public class Main {
-    
+
     public static int RemainPongDang(int nN, int nR) {
         int nSum = 0;
 
@@ -43,17 +44,16 @@ public class Main {
         return 0;
     }
 
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        int nN = sc.nextInt();
-        int nP = sc.nextInt();
-        int nT = sc.nextInt();
+    public static void main(String[] args) throws Exception{
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int nN = Integer.parseInt(br.readLine());
+        StringTokenizer st =new StringTokenizer(br.readLine());
+        int nP = Integer.parseInt(st.nextToken());
+        int nT = Integer.parseInt(st.nextToken());
 
         if (PongDang(nN, nP, nT) == 1)
             System.out.println("Dehet YeonJwaJe ^~^");
         else
             System.out.println("Hing...NoJam");
-        
-        sc.close();
     }
 }
