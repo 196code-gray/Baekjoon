@@ -1,62 +1,44 @@
 import java.io.*;
 import java.util.*;
 
-class Coin {
-    int value, quantity;
-    Coin(int value, int quantity) {
-        this.value = value;
-        this.quantity = quantity;
-    }
-}
-
 public class Main {
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = null;
-
-        int T = 3;
-        while(T-- > 0) {
-            int n = Integer.parseInt(br.readLine());
-            Coin[] coins = new Coin[n+1];  // 원장님이 주는 금액의 최대는 10만원
-            boolean[] dp = new boolean[100001];  // i원 만들기 가능?
-
-            int total = 0;
-            for(int i = 1; i <= n; i++) {
+    static int n;
+    static int[][] coins;
+    public static void main(String[] args) throws IOException{
+        BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st;
+        StringBuilder sb=new StringBuilder();
+        for(int tc=1;tc<=3;tc++) {
+            n = Integer.parseInt(br.readLine());
+            int sum = 0;
+            coins = new int[n][2];
+            for (int i = 0; i < n; i++) {
                 st = new StringTokenizer(br.readLine());
-                int value = Integer.parseInt(st.nextToken());
-                int quantity = Integer.parseInt(st.nextToken());
-                coins[i] = new Coin(value, quantity);
-                total += value * quantity;  // 받은 총 금액 구함
-                for(int j = 1; j <= quantity; j++) {
-                    dp[value * j] = true;  // 각 종류의 동전으로 만들 수 있는 액수 먼저 체크
-                }
+                int coin = coins[i][0] = Integer.parseInt(st.nextToken());
+                int cnt = coins[i][1] = Integer.parseInt(st.nextToken());
+                sum += coin * cnt;
             }
-
-            // 홀수인 경우
-            if(total % 2 == 1) {
-                System.out.println(0);
-                continue;
-            }
-            
-            dp[0] = true;
-            for(int i = 1; i <= n; i++) {
-                int v = coins[i].value;
-                int q = coins[i].quantity;
-                      
-                for(int j = total/2; j >= v; j--) {
-                    if(dp[j - v]) {  // dp[j-v]가 가능해야 됨
-
-                        // (j-v)원부터 동전 v를 하나씩 사용하는 것
-                        for(int k = 1; k <= q; k++) {
-                            if(j - v + v * k > total/2) break;  // dp[total/2] 이상으로는 어차피 채울 필요 없음
-                            dp[j - v + v * k] = true;
-                        }
-                    }
-                    if (dp[total /2]) break;
-                }
-                if (dp[total /2]) break;
-            }
-            System.out.println(dp[total / 2] ? 1 : 0);
+            if (sum % 2 != 0) sb.append(0);
+            else sb.append(solve(sum/2));
+            sb.append("\n");
         }
+        System.out.print(sb.toString());
+    }
+    static int solve(int mid){
+        int[] dp = new int[mid + 1];
+        Arrays.fill(dp, Integer.MAX_VALUE);
+        dp[0] = 0;
+        for (int i = 0; i < n; i++) {
+            int[] coin=coins[i];
+            for (int j = 0; j <= mid; j++) {
+                if (dp[j] == Integer.MAX_VALUE) continue;
+                if (j + coin[0] <= mid && dp[j] < coin[1] ) {
+                    dp[j + coin[0]] = Math.min(dp[j + coin[0]], dp[j] + 1);
+                }
+                dp[j] = 0;
+            }
+        }
+        if (dp[mid] != Integer.MAX_VALUE) return 1;
+        else return 0;
     }
 }
