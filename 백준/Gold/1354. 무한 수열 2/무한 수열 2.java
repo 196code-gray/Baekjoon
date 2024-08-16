@@ -1,35 +1,46 @@
-import java.io.*;
-import java.util.*;
+import java.util.Scanner;
 
 public class Main {
+	private static long N, dp[];
+	private static int P, Q, X, Y, MAX;
 
-    static long n;
-    static int p, q, x, y;
-    static Map<Long, Long> map = new HashMap<>();
+	public static void main(String[] args) throws Exception {
+		Scanner sc = new Scanner(System.in);
+		N = sc.nextLong();
+		P = sc.nextInt();
+		Q = sc.nextInt();
+		X = sc.nextInt();
+		Y = sc.nextInt();
 
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = new StringTokenizer(br.readLine());
+		MAX = (int)1e7;
 
-        n = Long.parseLong(st.nextToken());
-        p = Integer.parseInt(st.nextToken());
-        q = Integer.parseInt(st.nextToken());
-        x = Integer.parseInt(st.nextToken());
-        y = Integer.parseInt(st.nextToken());
+		dp = new long[MAX + 1];
+		dp[0] = 1;
+		for (int i = 1; i <= MAX; i++) {
+			int nx = i / P - X;
+			int ny = i / Q - Y;
 
-        System.out.println(get(n));
-    }
+			if (nx <= 0) dp[i]++;
+			else dp[i] += dp[nx];
 
-    static long get(long key) {
-        if (map.get(key) == null) { put(key); }
-        return map.get(key);
-    }
+			if (ny <= 0) dp[i]++;
+			else dp[i] += dp[ny];
+		}
 
-    static void put(long key) {
-        if (key <= 0L) {
-            map.put(key, 1L);
-        } else {
-            map.put(key, get(key / p - x) + get(key / q - y));
-        }
-    }
+		if (N <= MAX) {
+			System.out.println(dp[(int) N]);
+		} else {
+			System.out.println(go(N));
+		}
+	}
+
+	private static long go(long n) {
+		if (n <= 0) return 1;
+
+		if (n <= MAX) {
+			return dp[(int) n];
+		}
+
+		return go(n / P - X) + go(n / Q - Y);
+	}
 }
